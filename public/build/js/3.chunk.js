@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[3],{Yhir:function(i,n,o){"use strict";o.r(n),n.default={init(){console.log("> common init ----")},finalize(){}}}}]);
+//# sourceMappingURL=3.chunk.js.map

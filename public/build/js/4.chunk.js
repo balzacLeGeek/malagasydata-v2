@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[4],{IvCd:function(e,n,o){"use strict";o.r(n);var t=o("ukxx"),s=o.n(t),l={name:"IndexComponent",components:{},props:{},data:()=>({}),methods:{}},p=o("KHd+"),a=Object(p.a)(l,(function(){var e=this.$createElement;return(this._self._c||e)("div",[this._v("Hello VueJs")])}),[],!1,null,null,null).exports;n.default={init(){new s.a({el:"#home-wrapper",delimiters:["${","}"],components:{home:a},mounted(){console.log("Home page")}})}}}}]);
+//# sourceMappingURL=4.chunk.js.map

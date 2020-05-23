@@ -1,0 +1,16 @@
+{% set hash = 'b6cb75e7d774a9bc5e31' %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{{ site.name }}{% endblock %}</title>
+        <link rel="icon" type="image/png" href="favicon.png" />
+        {% include "build/css.html.twig" with { hash: hash } %}
+    </head>
+    <body {% block body_attr %}{% endblock %}>
+        {% block body %}{% endblock %}
+
+        {% include "build/js.html.twig" with { hash: hash } %}
+    </body>
+</html>
