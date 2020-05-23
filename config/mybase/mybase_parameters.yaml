@@ -1,0 +1,8 @@
+parameters:
+    root_dir: '%kernel.project_dir%'
+    mailer:
+        smtp_host: 'smtp.gmail.com'
+        smtp_port: 587
+        smtp_cert: 'tls'
+        smtp_username: 'adressonlyfordev@gmail.com'
+        smtp_password: 'xcbbmjavbohbqvpi'

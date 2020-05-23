@@ -1,0 +1,10 @@
+services:
+    mybase.base.services:
+        class: App\Mybase\Services\Base\SBase
+        arguments: ['@doctrine.orm.default_entity_manager', '@service_container']
+        public: true
+
+    mybase.mailer.services:
+        class: App\Mybase\Services\Mailer
+        arguments: ['%mailer%']
+        public: true
