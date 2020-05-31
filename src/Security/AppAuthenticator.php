@@ -3,8 +3,10 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -16,10 +18,9 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
-use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class AppAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
+class AppAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
 
@@ -53,6 +54,7 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
             'password' => $payload['password'],
             'csrf_token' => $payload['_csrf_token'],
         ];
+
         $request->getSession()->set(
             Security::LAST_USERNAME,
             $credentials['email']
@@ -63,14 +65,17 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        // $token = new CsrfToken('authenticate', $credentials['csrf_token']);
+        $token = new CsrfToken('authenticate', $credentials['csrf_token']);
 
-        // if (!$this->csrfTokenManager->isTokenValid($token)) {
-        //     throw new \Exception('Csrf Token ...');
-        // }
+        if (!$this->csrfTokenManager->isTokenValid($token)) {
+            throw new HttpException(JsonResponse::HTTP_BAD_REQUEST, "Désolé! Cette session n'est plus valide");
+        }
+
+        /** @var UserRepository $userRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
 
         /** @var User $user */
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
+        $user = $userRepository->getByCredential($credentials['email']);
 
         if (!$user) {
             throw new HttpException(JsonResponse::HTTP_BAD_REQUEST, "Désolé! Ce compte n'existe pas");
@@ -101,11 +106,12 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new JsonResponse([
                 'redirect_url' => $targetPath,
+                'message' => 'Vous êtes connecté',
             ]);
         }
 
         return new JsonResponse([
-            'message' => 'Logged',
+            'message' => 'Vous êtes connecté',
         ]);
     }
 

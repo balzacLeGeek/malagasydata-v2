@@ -13,7 +13,6 @@ class IndexController extends AbstractController
      */
     public function index(): Response
     {
-        dump("admin");
         die();
     }
 }
